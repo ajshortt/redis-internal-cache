@@ -1,11 +1,16 @@
 {
-  "name": "ts-npm-package-boilerplate",
-  "version": "0.2.3",
-  "description": "TypeScript NPM Module Boilerplate",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "name": "redis-internal-cache",
+  "version": "0.0.1",
+  "description": "Handy declaritive API wrapping redis to creat a internal fallback cache handlers",
+  "main": "dist/redis-internal-cache.js",
+  "types": "dist/redis-internal-cache.d.js",
   "scripts": {
-    "build": "tsc",
+    "build": "run-s clear compile bundle cleanup",
+    "compile": "tsc",
+    "bundle": "rollup -c --bundleConfigAsCjs",
+    "watch": "tsc --watch",
+    "clear": "rimraf ./build && rimraf ./dist",
+    "cleanup": "rimraf ./dist/build",
     "format": "prettier --write \"src/**/*.(js|ts)\"",
     "lint": "eslint src --ext .js,.ts",
     "lint:fix": "eslint src --fix --ext .js,.ts",
@@ -14,34 +19,51 @@
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "size": "npm run build && size-limit"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hebertcisco/ts-npm-package-boilerplate.git"
+    "url": "git+https://github.com/ajshortt/redis-internal-cache.git"
   },
   "keywords": [
-    "boilerplate",
+    "redis",
+    "cache",
     "typescript"
   ],
-  "author": "Hebert Cisco",
+  "author": "Alex Shortt",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hebertcisco/ts-npm-package-boilerplate/issues"
+    "url": "https://github.com/ajshortt/redis-internal-cache/issues"
   },
-  "homepage": "https://github.com/hebertcisco/ts-npm-package-boilerplate#readme",
+  "homepage": "https://github.com/ajshortt/redis-internal-cache#readme",
   "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.1",
+    "@size-limit/file": "^8.2.4",
+    "@types/express": "^4.17.17",
     "@types/jest": "29.4.0",
     "@typescript-eslint/eslint-plugin": "5.54.0",
     "@typescript-eslint/parser": "5.52.0",
+    "dayjs": "^1.11.8",
     "eslint": "8.35.0",
     "eslint-plugin-jest": "27.2.1",
     "jest": "29.4.3",
+    "npm-run-all": "^4.1.5",
     "prettier": "2.8.4",
+    "redis": "^4.6.7",
+    "rimraf": "^5.0.1",
+    "rollup": "^3.25.1",
+    "rollup-plugin-dts": "^5.3.0",
+    "size-limit": "^8.2.4",
     "ts-jest": "29.0.5",
     "typescript": "4.9.5"
   },
   "files": [
-    "lib/**/*"
+    "src/**/*"
+  ],
+  "size-limit": [
+    {
+      "path": "dist/*"
+    }
   ]
 }
