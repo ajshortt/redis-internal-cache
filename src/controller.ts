@@ -1,12 +1,4 @@
 import {
-  RedisClient,
-  CacheObject,
-  CacheContext,
-  RedisInternalCacheControllerType
-} from "./types"
-import {getNowDateTime, hasStaleIfErrorCacheExpired, isCacheStale } from "./helpers"
-import { DEFAULT_CACHE_HEADERS } from "./config"
-import {
   CACHE_AGE_HEADER_KEY,
   CACHE_DYNAMIC,
   CACHE_HIT,
@@ -14,26 +6,28 @@ import {
   CACHE_LAST_SAVE_HEADER_KEY,
   CACHE_MISS,
   CACHE_STALE_IF_ERROR_AGE_HEADER_KEY,
-} from "./const"
+} from './const'
+import { DEFAULT_CACHE_HEADERS } from './config'
+import { getNowDateTime, hasStaleIfErrorCacheExpired, isCacheStale } from './helpers'
+import { RedisClient, CacheObject, CacheContext, RedisInternalCacheControllerType } from './types'
 
 export const RedisInternalCacheController = (
   ctx: CacheContext,
-  redis: RedisClient
+  redis: RedisClient,
 ): RedisInternalCacheControllerType => {
-
   return {
     fetch: async (): Promise<CacheObject> => {
       if (ctx.config.disabled) {
         return {
           status: CACHE_INACTIVE,
-          headers: DEFAULT_CACHE_HEADERS
+          headers: DEFAULT_CACHE_HEADERS,
         }
       }
 
       if (ctx.flags.skip_cache) {
         return {
           status: CACHE_MISS,
-          headers: DEFAULT_CACHE_HEADERS
+          headers: DEFAULT_CACHE_HEADERS,
         }
       }
 
@@ -42,7 +36,7 @@ export const RedisInternalCacheController = (
       if (!fetchedCache) {
         return {
           status: CACHE_DYNAMIC,
-          headers: DEFAULT_CACHE_HEADERS
+          headers: DEFAULT_CACHE_HEADERS,
         }
       }
 
@@ -53,14 +47,14 @@ export const RedisInternalCacheController = (
         return {
           status: CACHE_DYNAMIC,
           response: parsedCached.response || null,
-          headers: parsedCached.headers || DEFAULT_CACHE_HEADERS
+          headers: parsedCached.headers || DEFAULT_CACHE_HEADERS,
         }
       }
 
       return {
         status: CACHE_HIT,
         response: parsedCached.response,
-        headers: parsedCached.headers
+        headers: parsedCached.headers,
       }
     },
 
@@ -74,12 +68,15 @@ export const RedisInternalCacheController = (
       res.setHeader(`${ctx.config.headerPrefix}-cache-status`, cache.status || CACHE_DYNAMIC)
       res.setHeader(`${ctx.config.headerPrefix}-cache-last-save`, cache?.headers?.[CACHE_LAST_SAVE_HEADER_KEY] || null)
       res.setHeader(`${ctx.config.headerPrefix}-cache-age`, cache?.headers?.[CACHE_AGE_HEADER_KEY] || 0)
-      res.setHeader(`${ctx.config.headerPrefix}-stale-if-error-age`, cache?.headers?.[CACHE_STALE_IF_ERROR_AGE_HEADER_KEY] || 0)
+      res.setHeader(
+        `${ctx.config.headerPrefix}-stale-if-error-age`,
+        cache?.headers?.[CACHE_STALE_IF_ERROR_AGE_HEADER_KEY] || 0,
+      )
 
       return res
     },
 
-    getResponse: (cache: CacheObject): object|string|number|null => {
+    getResponse: (cache: CacheObject): object | string | number | null => {
       return cache?.response
     },
 
@@ -88,11 +85,10 @@ export const RedisInternalCacheController = (
 
       if (!cache || !cache.status || !staleIfErrorAge) return false
 
-      const isCacheValid = (
-        cache.status !== CACHE_MISS
-        && cache.status !== CACHE_INACTIVE
-        && !hasStaleIfErrorCacheExpired(cache, staleIfErrorAge)
-      )
+      const isCacheValid =
+        cache.status !== CACHE_MISS &&
+        cache.status !== CACHE_INACTIVE &&
+        !hasStaleIfErrorCacheExpired(cache, staleIfErrorAge)
 
       return isCacheValid
     },
@@ -112,8 +108,8 @@ export const RedisInternalCacheController = (
         headers: {
           [CACHE_LAST_SAVE_HEADER_KEY]: getNowDateTime(),
           [CACHE_AGE_HEADER_KEY]: cacheAge,
-          [CACHE_STALE_IF_ERROR_AGE_HEADER_KEY]: staleIfErrorCacheAge
-        }
+          [CACHE_STALE_IF_ERROR_AGE_HEADER_KEY]: staleIfErrorCacheAge,
+        },
       }
 
       const setCacheRes = await redis.set(ctx.cacheKey, JSON.stringify(newCacheObject))
@@ -125,7 +121,7 @@ export const RedisInternalCacheController = (
     },
 
     disconnect: async (): Promise<void> => {
-      await redis.disconnect();
-    }
+      await redis.disconnect()
+    },
   }
 }

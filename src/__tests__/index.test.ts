@@ -1,5 +1,5 @@
 describe('project init', () => {
   test('should return true', () => {
-    expect(true).toBeTruthy();
-  });
-});
+    expect(true).toBeTruthy()
+  })
+})

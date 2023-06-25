@@ -1,24 +1,17 @@
-import {
-  ReqType,
-  ReqFlags,
-  CacheContext,
-  CacheSettings,
-  ControllerConfig,
-  ControllerConfigParam,
-} from "./types"
-import { parseReq } from "./parsers"
-import { DEFAULT_CONFIG } from "./config"
-import { getFlagsFromReq, hashCacheKey } from "./helpers"
+import { parseReq } from './parsers'
+import { DEFAULT_CONFIG } from './config'
+import { getFlagsFromReq, hashCacheKey } from './helpers'
+import { ReqType, ReqFlags, CacheContext, CacheSettings, ControllerConfig, ControllerConfigParam } from './types'
 
 export const createContext = (
   req: ReqType,
   signiture: string,
   settings: CacheSettings,
-  config: ControllerConfigParam = {}
+  config: ControllerConfigParam = {},
 ): CacheContext => {
   const parsedConfig: ControllerConfig = {
     ...DEFAULT_CONFIG,
-    ...config
+    ...config,
   }
 
   const parsedReq = parseReq(req, parsedConfig)

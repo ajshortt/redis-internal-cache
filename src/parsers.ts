@@ -1,11 +1,11 @@
-import { REQ_RES_EXPRESS, REQ_RES_VERCEL } from "./const"
-import { ControllerConfig, ReqType, Request } from "./types"
+import { REQ_RES_EXPRESS, REQ_RES_VERCEL } from './const'
+import { ControllerConfig, ReqType, Request } from './types'
 
 const parseVercelReq = (req: ReqType): Request => {
   return {
     ...req,
     url: req.url,
-    query: req.query
+    query: req.query,
   }
 }
 
@@ -13,7 +13,7 @@ const parseExpressReq = (req: ReqType): Request => {
   return {
     ...req,
     url: `${req.hostname}${req.originalUrl}`,
-    query: req.query
+    query: req.query,
   }
 }
 
