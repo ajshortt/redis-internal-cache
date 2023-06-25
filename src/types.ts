@@ -1,4 +1,30 @@
-import { CACHE_AGE_HEADER_KEY, CACHE_LAST_SAVE_HEADER_KEY, CACHE_STALE_IF_ERROR_AGE_HEADER_KEY, SET_CACHE_PARAM_KEY, SKIP_CACHE_PARAM_KEY } from "./const";
+import {
+  CACHE_AGE_HEADER_KEY,
+  CACHE_LAST_SAVE_HEADER_KEY,
+  CACHE_STALE_IF_ERROR_AGE_HEADER_KEY,
+  SET_CACHE_PARAM_KEY,
+  SKIP_CACHE_PARAM_KEY
+} from "./const";
+
+export interface RedisInternalCacheService {
+  init(
+    req: ReqType,
+    signiture: string,
+    settings: CacheSettings,
+    config?: ControllerConfig
+  ): Promise<RedisInternalCacheControllerType>
+}
+
+export interface RedisInternalCacheControllerType {
+  fetch(): Promise<CacheObject>
+  isHit(cache: CacheObject): boolean
+  setHeaders(res: any, cache: CacheObject): any
+  getResponse(cache: CacheObject): object|string|number|null
+  isStaleCacheAvailable(cache: CacheObject): boolean
+  canSetCache(cache: CacheObject): boolean
+  set(responseToSet: any): Promise<void>
+  disconnect(): Promise<void>
+}
 
 export interface SetupOptions {
   url: string | null
@@ -28,7 +54,7 @@ export type ReqType = VercelRequest & ExpressRequest
 
 export interface ControllerConfig {
   disabled?: boolean
-  reqType?: string
+  reqResVendor?: string
   headerPrefix: string
 }
 
@@ -65,4 +91,11 @@ export interface CacheContext {
   config: ControllerConfig,
   flags: ReqFlags,
   cacheKey: string,
+}
+
+export interface RedisClient {
+  connect(): Promise<void>
+  get(cacheKey: string): any
+  set(cacheKey: string, jsonStringToStore: string): Promise<string>
+  disconnect(): Promise<void>
 }

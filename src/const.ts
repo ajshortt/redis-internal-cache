@@ -1,3 +1,7 @@
+// Req/Res Vendors
+export const REQ_RES_VERCEL = 'vercel'
+export const REQ_RES_EXPRESS = 'express'
+
 // Flags
 export const SKIP_CACHE_PARAM_KEY = 'skip_cache'
 export const SET_CACHE_PARAM_KEY = 'set_cache'

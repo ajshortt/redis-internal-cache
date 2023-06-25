@@ -1,8 +1,14 @@
-// import { VercelRequest } from "@vercel/node"
+import {
+  ReqType,
+  ReqFlags,
+  CacheContext,
+  CacheSettings,
+  ControllerConfig,
+  ControllerConfigParam,
+} from "./types"
+import { parseReq } from "./parsers"
 import { DEFAULT_CONFIG } from "./config"
 import { getFlagsFromReq, hashCacheKey } from "./helpers"
-import { parseReq } from "./parsers"
-import { CacheContext, CacheSettings, ControllerConfig, ControllerConfigParam, ReqFlags, ReqType } from "./types"
 
 export const createContext = (
   req: ReqType,

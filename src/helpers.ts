@@ -1,7 +1,9 @@
 import dayjs from 'dayjs'
+import sha256 from 'crypto-js/sha256'
+import Base64 from 'crypto-js/enc-base64'
 import { DEFAULT_FLAG_PARAMS } from "./config"
-import { CacheObject, ReqFlags, Request, RequestQuery } from "./types"
 import { CACHE_LAST_SAVE_HEADER_KEY } from "./const"
+import { CacheObject, ReqFlags, Request, RequestQuery } from "./types"
 
 export const getFlagsFromReq = (req: Request): ReqFlags => {
   const { query } = req
@@ -31,12 +33,10 @@ export const getFlagsFromReq = (req: Request): ReqFlags => {
 }
 
 export const hashCacheKey = (req: Request , signiture: string): string => {
-//   console.log('url :>> ', url);
-//   console.log('signiture :>> ', signiture);
-
-// const {}
-
-  return 'test'
+  const string = req.url ? `${signiture}:${req.url}` : signiture
+  const hashDigest = sha256(string)
+  const hash = Base64.stringify(hashDigest);
+  return hash
 }
 
 export const isCacheStale = (cache: CacheObject, cacheAge: number): boolean => {

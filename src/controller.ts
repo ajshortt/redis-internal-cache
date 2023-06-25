@@ -1,6 +1,9 @@
-// import { VercelResponse } from "@vercel/node"
-import { CacheContext, CacheObject } from "./types"
-import { RedisClient } from "./redis"
+import {
+  RedisClient,
+  CacheObject,
+  CacheContext,
+  RedisInternalCacheControllerType
+} from "./types"
 import {getNowDateTime, hasStaleIfErrorCacheExpired, isCacheStale } from "./helpers"
 import { DEFAULT_CACHE_HEADERS } from "./config"
 import {
@@ -16,7 +19,7 @@ import {
 export const RedisInternalCacheController = (
   ctx: CacheContext,
   redis: RedisClient
-) => {
+): RedisInternalCacheControllerType => {
 
   return {
     fetch: async (): Promise<CacheObject> => {
@@ -65,7 +68,7 @@ export const RedisInternalCacheController = (
       return !!(cache && cache.status === CACHE_HIT)
     },
 
-    setHeaders(res: any, cache: CacheObject): any {
+    setHeaders: (res: any, cache: CacheObject): any => {
       if (!cache) return res
 
       res.setHeader(`${ctx.config.headerPrefix}-cache-status`, cache.status || CACHE_DYNAMIC)
@@ -121,7 +124,7 @@ export const RedisInternalCacheController = (
       }
     },
 
-    disconnect: async () => {
+    disconnect: async (): Promise<void> => {
       await redis.disconnect();
     }
   }

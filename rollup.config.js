@@ -9,7 +9,7 @@ const config = [
       format: 'cjs',
       sourcemap: true,
     },
-    external: ['redis', 'dayjs'],
+    external: ['dayjs', 'crypto-js/sha256', 'crypto-js/enc-base64'],
     plugins: [typescript()]
   }, {
     input: 'build/types.d.ts',

@@ -1,17 +1,21 @@
-import { CacheHeaders, ControllerConfig, ReqFlags } from "./types";
-
 import {
+  ReqFlags,
+  CacheHeaders,
+  ControllerConfig
+} from "./types";
+import {
+  REQ_RES_EXPRESS,
+  SET_CACHE_PARAM_KEY,
+  SKIP_CACHE_PARAM_KEY,
   CACHE_AGE_HEADER_KEY,
   CACHE_LAST_SAVE_HEADER_KEY,
   CACHE_STALE_IF_ERROR_AGE_HEADER_KEY,
-  SET_CACHE_PARAM_KEY,
-  SKIP_CACHE_PARAM_KEY
 } from "./const";
 
 export const DEFAULT_CONFIG: ControllerConfig = {
   disabled: false,
   headerPrefix: 'ric',
-  reqType: 'express'
+  reqResVendor: REQ_RES_EXPRESS
 }
 
 export const DEFAULT_FLAG_PARAMS: ReqFlags = {

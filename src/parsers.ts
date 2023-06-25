@@ -1,3 +1,4 @@
+import { REQ_RES_EXPRESS, REQ_RES_VERCEL } from "./const"
 import { ControllerConfig, ReqType, Request } from "./types"
 
 const parseVercelReq = (req: ReqType): Request => {
@@ -17,10 +18,10 @@ const parseExpressReq = (req: ReqType): Request => {
 }
 
 export const parseReq = (req: ReqType, config: ControllerConfig): Request | null => {
-  const { reqType } = config
+  const { reqResVendor } = config
 
-  if (reqType === 'vercel') return parseVercelReq(req)
-  if (reqType === 'express') return parseExpressReq(req)
+  if (reqResVendor === REQ_RES_VERCEL) return parseVercelReq(req)
+  if (reqResVendor === REQ_RES_EXPRESS) return parseExpressReq(req)
 
   return null
 }
