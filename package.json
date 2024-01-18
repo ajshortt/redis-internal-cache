@@ -1,7 +1,7 @@
 {
   "name": "redis-internal-cache",
   "version": "0.0.1",
-  "description": "Handy declaritive API wrapping redis to creat a internal fallback cache handlers",
+  "description": "Handy declaritive API wrapping redis to creat a internal fallback cache handlers.",
   "main": "dist/redis-internal-cache.js",
   "types": "dist/redis-internal-cache.d.js",
   "scripts": {
@@ -19,8 +19,7 @@
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags",
-    "relink": "npm unlink redis-internal-cache && npm link"
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
@@ -40,6 +39,7 @@
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.1",
     "@size-limit/file": "^8.2.4",
+    "@types/crypto-js": "^4.1.1",
     "@types/jest": "29.4.0",
     "@typescript-eslint/eslint-plugin": "5.54.0",
     "@typescript-eslint/parser": "5.52.0",
@@ -56,7 +56,6 @@
     "typescript": "4.9.5"
   },
   "dependencies": {
-    "@types/crypto-js": "^4.1.1",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.11.8"
   },
